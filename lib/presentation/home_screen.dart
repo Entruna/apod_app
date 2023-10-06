@@ -1,4 +1,5 @@
 import 'package:apod_app/injection.dart';
+import 'package:apod_app/presentation/widget/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,7 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Home Screen')),
+      drawer: const SideMenu(),
+      appBar: AppBar(title: const Text('Home Screen')),
       body: _buildImage(),
     );
   }
