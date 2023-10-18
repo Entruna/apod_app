@@ -1,6 +1,5 @@
+import 'package:apod_app/presentation/home/image_ui_model.dart';
 import 'package:equatable/equatable.dart';
-
-import 'image_ui_model.dart';
 
 ///[ImageState] defines the possible states of the image
 abstract class ImageState extends Equatable {
@@ -20,8 +19,4 @@ class ImageLoaded extends ImageState {
   const ImageLoaded(this.imageModel);
 }
 
-class ImageError extends ImageState {
-  final String? message;
-
-  const ImageError(this.message);
-}
+class ImageError extends ImageState {}

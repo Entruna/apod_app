@@ -8,9 +8,9 @@ part of '../../../network/model/apod_response_dto.dart';
 
 ApodResponseDto _$ApodResponseDtoFromJson(Map<String, dynamic> json) =>
     ApodResponseDto(
-      title: json['title'] as String,
-      date: json['date'] as String,
-      hdUrl: json['hdurl'] as String,
+      title: json['title'] as String?,
+      date: json['date'] as String?,
+      hdUrl: json['hdurl'] as String?,
     );
 
 Map<String, dynamic> _$ApodResponseDtoToJson(ApodResponseDto instance) =>

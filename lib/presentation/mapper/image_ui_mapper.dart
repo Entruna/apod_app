@@ -1,13 +1,10 @@
 import 'package:apod_app/data/model/image_data_model.dart';
-import 'package:apod_app/presentation/constants.dart';
-import 'package:apod_app/presentation/image/image_ui_model.dart';
-import 'package:intl/intl.dart';
+import 'package:apod_app/presentation/home/image_ui_model.dart';
 
-///Mapping data from [ImageDataModel] data layer class to [ImageUIModel] presentation layer class
+//////[ImageUIMapper] class for mapping
 class ImageUIMapper {
+  ///[mapImageFromDomain] maps data from [ImageDataModel] data layer class to [ImageUIModel] presentation layer class
   ImageUIModel mapImageFromDomain(final ImageDataModel data) {
-    DateTime? date = data.date;
-    String formattedDate = date != null ? DateFormat("yyyy-MM-dd").format(date) : StringConstants.emptyString;
-    return ImageUIModel(title: data.title ?? StringConstants.emptyString, date: formattedDate, imgUrl: data.imgUrl ?? StringConstants.emptyString);
+    return ImageUIModel(title: data.title, date: data.date, imgUrl: data.imgUrl);
   }
 }

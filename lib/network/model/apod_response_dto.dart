@@ -12,17 +12,12 @@ class ApodResponseDto extends Equatable {
   String? date;
   @JsonKey(name: "hdurl")
   String? hdUrl;
-  String? error;
 
-  ApodResponseDto({required this.title, required this.date, required this.hdUrl});
+  ApodResponseDto({this.title, this.date, this.hdUrl});
 
   factory ApodResponseDto.fromJson(Map<String, dynamic> json) => _$ApodResponseDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$ApodResponseDtoToJson(this);
-
-  ApodResponseDto.withError(String errorMessage) {
-    error = errorMessage;
-  }
 
   @override
   List<Object?> get props => [title, date, hdUrl];

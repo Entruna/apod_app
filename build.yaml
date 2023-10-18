@@ -1,3 +1,4 @@
+# Helps generate files into a folder
 targets:
   $default:
     builders:
