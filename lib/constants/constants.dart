@@ -1,9 +1,8 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 ///[StringConstants] class contains the strings used in the application
 class StringConstants {
   static const emptyString = "";
-  static String? apiKey = dotenv.env["APY_KEY"];
   static const url = "https://api.nasa.gov/planetary/apod";
 
   static const savingImageToGallery = "Saving image to gallery";

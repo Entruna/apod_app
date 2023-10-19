@@ -13,13 +13,9 @@ class SearchCubit extends Cubit<SearchState> {
         super(SearchInitial());
 
   Future<void> saveImages() async {
-    try {
       emit(SearchImagesSaving());
       await _imageInteractor.saveImagesToDatabase();
       emit(SearchImagesSaved());
-    } catch (e) {
-      emit(SearchError());
-    }
   }
 
   Future<void> searchByTitle(String searchText) async {

@@ -2,12 +2,15 @@ import 'package:apod_app/constants/constants.dart';
 import 'package:apod_app/network/model/apod_response_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
 
 ///[ApiService] class handles API calls
 class ApiService {
   final Dio _dioClient;
+  String? apiKey = dotenv.env["APY_KEY"];
+
 
   ApiService({
     required Dio dioClient,
@@ -15,7 +18,7 @@ class ApiService {
 
   Future<ApodResponseDto> getLastApod() async {
     try {
-      final response = await _dioClient.get("${StringConstants.url}?api_key=${StringConstants.apiKey}");
+      final response = await _dioClient.get("${StringConstants.url}?api_key=$apiKey");
       return ApodResponseDto.fromJson(response.data);
     } catch (e) {
       throw Exception("Data not found / Connection issue: $e");
@@ -24,7 +27,7 @@ class ApiService {
 
   Future<ApodResponseDto> getApodByDate(String date) async {
     try {
-      final response = await _dioClient.get("${StringConstants.url}?api_key=${StringConstants.apiKey}&date=$date");
+      final response = await _dioClient.get("${StringConstants.url}?api_key=$apiKey&date=$date");
       return ApodResponseDto.fromJson(response.data);
     } catch (e) {
       throw Exception("Data not found / Connection issue: $e");
@@ -69,7 +72,7 @@ class ApiService {
 
   Future<Iterable<ApodResponseDto>> fetchImages(String startDate, String endDate) async {
     try {
-      final response = await _dioClient.get("${StringConstants.url}?api_key=${StringConstants.apiKey}&start_date=$startDate&end_date=$endDate");
+      final response = await _dioClient.get("${StringConstants.url}?api_key=$apiKey&start_date=$startDate&end_date=$endDate");
       final Iterable<dynamic> data = response.data;
       final images = data.map((image) => ApodResponseDto.fromJson(image)).toList();
       return images;
