@@ -58,9 +58,9 @@ class CustomSearchDelegate extends SearchDelegate {
                   height: 16.0,
                 ),
                 Text(
-                  StringConstants.downloadImages,
+                  StringConstants.syncingData,
                   maxLines: 2,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 )
               ]);
             case SearchImagesSaved():
@@ -68,6 +68,34 @@ class CustomSearchDelegate extends SearchDelegate {
                 child: Text(
                   StringConstants.dataSynced,
                   style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              );
+            case SearchImagesSavingError():
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white,
+                      child: IconButton(
+                          color: Colors.black,
+                          onPressed: () {
+                            Future.delayed(const Duration(seconds: 1), () async {
+                              await parentContext.read<SearchCubit>().saveImages();
+                            });
+                          },
+                          icon: const Icon(Icons.refresh)),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    const Text(
+                      StringConstants.errorSyncingData,
+                      maxLines: 2,
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ],
                 ),
               );
             case SearchLoading():
@@ -127,9 +155,9 @@ class CustomSearchDelegate extends SearchDelegate {
                     height: 16.0,
                   ),
                   Text(
-                    StringConstants.downloadImages,
+                    StringConstants.syncingData,
                     maxLines: 2,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   )
                 ]);
               case SearchImagesSaved():
@@ -137,6 +165,34 @@ class CustomSearchDelegate extends SearchDelegate {
                   child: Text(
                     StringConstants.dataSynced,
                     style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                );
+              case SearchImagesSavingError():
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: IconButton(
+                            color: Colors.black,
+                            onPressed: () {
+                              Future.delayed(const Duration(seconds: 1), () async {
+                                await parentContext.read<SearchCubit>().saveImages();
+                              });
+                            },
+                            icon: const Icon(Icons.refresh)),
+                      ),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      const Text(
+                        StringConstants.errorSyncingData,
+                        maxLines: 2,
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ],
                   ),
                 );
               case SearchLoading():

@@ -23,6 +23,8 @@ class SearchImagesSaving extends SearchState {}
 
 class SearchImagesSaved extends SearchState {}
 
+class SearchImagesSavingError extends SearchState {}
+
 class SearchNoResult extends SearchState {}
 
 class SearchError extends SearchState {}

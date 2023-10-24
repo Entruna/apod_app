@@ -2,6 +2,7 @@ import 'package:apod_app/domain/image_interactor.dart';
 import 'package:apod_app/presentation/mapper/image_ui_mapper.dart';
 import 'package:apod_app/presentation/search/search_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 ///[SearchCubit] handles search states
 class SearchCubit extends Cubit<SearchState> {
   final ImageInteractor _imageInteractor;
@@ -13,13 +14,17 @@ class SearchCubit extends Cubit<SearchState> {
         super(SearchInitial());
 
   Future<void> saveImages() async {
+    try {
       emit(SearchImagesSaving());
       await _imageInteractor.saveImagesToDatabase();
       emit(SearchImagesSaved());
+    } catch (_) {
+      emit(SearchImagesSavingError());
+    }
   }
 
   Future<void> searchByTitle(String searchText) async {
-    if (state != SearchImagesSaving()) {
+    if (state != SearchImagesSaving() && state != SearchImagesSavingError()) {
       try {
         emit(SearchLoading());
         final resultImages = await _imageInteractor.searchByTitle(searchText);

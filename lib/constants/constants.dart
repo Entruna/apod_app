@@ -1,5 +1,3 @@
-
-
 ///[StringConstants] class contains the strings used in the application
 class StringConstants {
   static const emptyString = "";
@@ -7,7 +5,8 @@ class StringConstants {
 
   static const savingImageToGallery = "Saving image to gallery";
   static const noImageFound = "No image found";
-  static const downloadImages = "Downloading data...This may take a few minutes";
+  static const syncingData = "Syncing data...This may take a few minutes";
+  static const errorSyncingData = "Error syncing data. Please try again!";
   static const noResult = "No result";
   static const dataSynced = "Data is synced. Start typing...";
   static const errorOccurred = "Error occurred";
