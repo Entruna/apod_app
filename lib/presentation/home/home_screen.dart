@@ -4,6 +4,7 @@ import 'package:apod_app/presentation/home/image_state.dart';
 import 'package:apod_app/presentation/home/image_ui_model.dart';
 import 'package:apod_app/presentation/internet_connection/network_bloc.dart';
 import 'package:apod_app/presentation/internet_connection/network_state.dart';
+import 'package:apod_app/presentation/widget/image_error_widget.dart';
 import 'package:apod_app/presentation/widget/loading.dart';
 import 'package:apod_app/presentation/widget/side_menu.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -112,7 +113,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               placeholder: (context, url) => const Loading(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+              errorWidget:  (context, url, error) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.grey,
+                    style: BorderStyle.solid,
+                    width: 1.0,
+                  ),
+                ),
+                child: const ImageErrorWidget(color: Colors.white,),
+              ),
             ),
           ),
           Text(
@@ -158,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   placeholder: (context, url) => const Loading(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget:  (context, url, error) => const ImageErrorWidget(color: Colors.white,)
                 ),
               ),
             ),

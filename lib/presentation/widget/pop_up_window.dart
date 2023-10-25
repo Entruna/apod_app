@@ -4,10 +4,12 @@ import 'package:apod_app/presentation/archive/archive_image_cubit.dart';
 import 'package:apod_app/presentation/home/image_ui_model.dart';
 import 'package:apod_app/presentation/internet_connection/network_bloc.dart';
 import 'package:apod_app/presentation/internet_connection/network_state.dart';
+import 'package:apod_app/presentation/widget/image_error_widget.dart';
 import 'package:apod_app/presentation/widget/loading.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 ///[PopUpWindow] widget
 class PopUpWindow extends StatefulWidget {
   final ImageUIModel? imageUIModel;
@@ -67,14 +69,11 @@ class _PopUpWindowState extends State<PopUpWindow> {
   ///[_buildNoImageAlertDialog] method builds the no image alert dialog
   Widget _buildNoImageAlertDialog(BoxConstraints constraints) {
     return SizedBox(
-      width: MediaQuery.of(context).orientation == Orientation.landscape ? constraints.maxHeight * 1.4 : constraints.maxWidth,
-      height: MediaQuery.of(context).orientation == Orientation.landscape ? constraints.maxWidth : constraints.maxHeight * 0.4,
-      child: const Center(
-          child: Text(
-        StringConstants.noImageFound,
-        style: TextStyle(color: Colors.white, fontSize: 18),
-      )),
-    );
+        width: MediaQuery.of(context).orientation == Orientation.landscape ? constraints.maxHeight * 1.4 : constraints.maxWidth,
+        height: MediaQuery.of(context).orientation == Orientation.landscape ? constraints.maxWidth : constraints.maxHeight * 0.4,
+        child: const ImageErrorWidget(
+          color: Colors.black,
+        ));
   }
 
   ///[_buildAlertDialogContent] method builds the image alert dialog
@@ -85,19 +84,17 @@ class _PopUpWindowState extends State<PopUpWindow> {
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Expanded(
           child: CachedNetworkImage(
-            imageUrl: widget.imageUIModel!.imgUrl,
-            imageBuilder: (context, imageProvider) => Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
-              ),
-            ),
-            placeholder: (context, url) => const Loading(),
-            errorWidget: (context, url, error) => const Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [Icon(Icons.error), Text(StringConstants.noImageFound)],
-            ),
-          ),
+              imageUrl: widget.imageUIModel!.imgUrl,
+              imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                    ),
+                  ),
+              placeholder: (context, url) => const Loading(),
+              errorWidget: (context, url, error) => const ImageErrorWidget(
+                    color: Colors.black,
+                  )),
         ),
         ListTile(
           title: Text(
