@@ -16,9 +16,9 @@ class $ImageEntityTable extends ImageEntity
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  late final GeneratedColumn<String> date = GeneratedColumn<String>(
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
       'date', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   static const VerificationMeta _urlMeta = const VerificationMeta('url');
   @override
   late final GeneratedColumn<String> url = GeneratedColumn<String>(
@@ -66,7 +66,7 @@ class $ImageEntityTable extends ImageEntity
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
       date: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}date'])!,
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
       url: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
     );
@@ -80,14 +80,14 @@ class $ImageEntityTable extends ImageEntity
 
 class Image extends DataClass implements Insertable<Image> {
   final String title;
-  final String date;
+  final DateTime date;
   final String url;
   const Image({required this.title, required this.date, required this.url});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['title'] = Variable<String>(title);
-    map['date'] = Variable<String>(date);
+    map['date'] = Variable<DateTime>(date);
     map['url'] = Variable<String>(url);
     return map;
   }
@@ -105,7 +105,7 @@ class Image extends DataClass implements Insertable<Image> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Image(
       title: serializer.fromJson<String>(json['title']),
-      date: serializer.fromJson<String>(json['date']),
+      date: serializer.fromJson<DateTime>(json['date']),
       url: serializer.fromJson<String>(json['url']),
     );
   }
@@ -114,12 +114,12 @@ class Image extends DataClass implements Insertable<Image> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'title': serializer.toJson<String>(title),
-      'date': serializer.toJson<String>(date),
+      'date': serializer.toJson<DateTime>(date),
       'url': serializer.toJson<String>(url),
     };
   }
 
-  Image copyWith({String? title, String? date, String? url}) => Image(
+  Image copyWith({String? title, DateTime? date, String? url}) => Image(
         title: title ?? this.title,
         date: date ?? this.date,
         url: url ?? this.url,
@@ -147,7 +147,7 @@ class Image extends DataClass implements Insertable<Image> {
 
 class ImageEntityCompanion extends UpdateCompanion<Image> {
   final Value<String> title;
-  final Value<String> date;
+  final Value<DateTime> date;
   final Value<String> url;
   final Value<int> rowid;
   const ImageEntityCompanion({
@@ -158,7 +158,7 @@ class ImageEntityCompanion extends UpdateCompanion<Image> {
   });
   ImageEntityCompanion.insert({
     required String title,
-    required String date,
+    required DateTime date,
     required String url,
     this.rowid = const Value.absent(),
   })  : title = Value(title),
@@ -166,7 +166,7 @@ class ImageEntityCompanion extends UpdateCompanion<Image> {
         url = Value(url);
   static Insertable<Image> custom({
     Expression<String>? title,
-    Expression<String>? date,
+    Expression<DateTime>? date,
     Expression<String>? url,
     Expression<int>? rowid,
   }) {
@@ -180,7 +180,7 @@ class ImageEntityCompanion extends UpdateCompanion<Image> {
 
   ImageEntityCompanion copyWith(
       {Value<String>? title,
-      Value<String>? date,
+      Value<DateTime>? date,
       Value<String>? url,
       Value<int>? rowid}) {
     return ImageEntityCompanion(
@@ -198,7 +198,7 @@ class ImageEntityCompanion extends UpdateCompanion<Image> {
       map['title'] = Variable<String>(title.value);
     }
     if (date.present) {
-      map['date'] = Variable<String>(date.value);
+      map['date'] = Variable<DateTime>(date.value);
     }
     if (url.present) {
       map['url'] = Variable<String>(url.value);

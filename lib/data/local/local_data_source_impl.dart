@@ -14,9 +14,9 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<Iterable<ImageDataModel>> getApodByTitle(String title) async {
-  final filteredImages = await _imageDao.getApodByTitle(title);
-  final resultImages = filteredImages.map((e) => _imageDataMapper.mapImageFromEntity(e));
-  return resultImages;
+    final filteredImages = await _imageDao.getApodByTitle(title);
+    final resultImages = filteredImages.map((e) => _imageDataMapper.mapImageFromEntity(e));
+    return resultImages;
   }
 
   @override
@@ -27,6 +27,6 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<int?> countRows() async {
-   return await _imageDao.countRows();
+    return await _imageDao.countRows();
   }
 }

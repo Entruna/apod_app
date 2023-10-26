@@ -14,8 +14,8 @@ class ImageDataMapper {
 
   ///[mapImageFromData] method maps data from [ImageDataModel] data layer class to [ImageEntityCompanion] database layer class
   ImageEntityCompanion mapImageFromData(final ImageDataModel dataModel) =>
-      ImageEntityCompanion(title: Value(dataModel.title), date: Value(dataModel.date), url: Value(dataModel.imgUrl));
+      ImageEntityCompanion(title: Value(dataModel.title), date: Value(DateTime.parse(dataModel.date)), url: Value(dataModel.imgUrl));
 
   ///[mapImageFromEntity] method maps data from [Image] database layer class to [ImageDataModel] data layer class
-  ImageDataModel mapImageFromEntity(final Image entity) => ImageDataModel(title: entity.title, date: entity.date, imgUrl: entity.url);
+  ImageDataModel mapImageFromEntity(final Image entity) => ImageDataModel(title: entity.title, date: entity.date.toIso8601String(), imgUrl: entity.url);
 }

@@ -5,7 +5,7 @@ import 'package:drift/drift.dart';
 class ImageEntity extends Table {
   TextColumn get title => text()();
 
-  TextColumn get date => text()();
+  DateTimeColumn get date => dateTime()();
 
   TextColumn get url => text()();
 

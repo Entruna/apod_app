@@ -11,7 +11,6 @@ class ApiService {
   final Dio _dioClient;
   String? apiKey = dotenv.env["APY_KEY"];
 
-
   ApiService({
     required Dio dioClient,
   }) : _dioClient = dioClient;
@@ -50,6 +49,7 @@ class ApiService {
   ///[getApodBetweenDates] method retrieves images from the server in half year batches
   Future<Iterable<ApodResponseDto>> getApodBetweenDates(DateTime startDate, DateTime endDate) async {
     List<ApodResponseDto> resultImages = [];
+    Iterable<ApodResponseDto> fetchedImages = [];
 
     resultImages = await compute((DateTime startD) async {
       List<ApodResponseDto> resultList = [];
@@ -58,8 +58,13 @@ class ApiService {
         final DateTime queryEndDate = nextYear.isBefore(endDate) ? nextYear : endDate;
         String formattedStartDate = DateFormat("yyyy-MM-dd").format(startD);
         String formattedEndDate = DateFormat("yyyy-MM-dd").format(queryEndDate);
+        print("NEXT YEAR: $nextYear");
 
-        resultList.addAll(await fetchImages(formattedStartDate, formattedEndDate));
+        fetchedImages = await repeatFetchImages(formattedStartDate, formattedEndDate);
+        if (fetchedImages.isEmpty) {
+          return resultList;
+        }
+        resultList.addAll(fetchedImages);
 
         startD = nextYear;
       }
@@ -70,14 +75,24 @@ class ApiService {
     return resultImages;
   }
 
-  Future<Iterable<ApodResponseDto>> fetchImages(String startDate, String endDate) async {
-    try {
-      final response = await _dioClient.get("${StringConstants.url}?api_key=$apiKey&start_date=$startDate&end_date=$endDate");
-      final Iterable<dynamic> data = response.data;
-      final images = data.map((image) => ApodResponseDto.fromJson(image)).toList();
-      return images;
-    } catch (e) {
-      throw Exception("Data not found / Connection issue: $e");
+  Future<Iterable<ApodResponseDto>> repeatFetchImages(String startDate, String endDate) async {
+    const int maxRetries = 3;
+    int retry = 0;
+    List<ApodResponseDto> images = [];
+
+    while (retry < maxRetries) {
+      try {
+        final response = await _dioClient.get("${StringConstants.url}?api_key=$apiKey&start_date=$startDate&end_date=$endDate");
+        final Iterable<dynamic> data = response.data;
+        images = data.map((image) => ApodResponseDto.fromJson(image)).toList();
+        return images;
+      } catch (e) {
+        print("Connection issue, retry: $retry, exception: $e, images:${images.length}");
+      }
+
+      retry++;
     }
+
+    return const Iterable.empty();
   }
 }

@@ -7,13 +7,13 @@ part '../../generated/network/model/apod_response_dto.g.dart';
 @JsonSerializable()
 class ApodResponseDto extends Equatable {
   @JsonKey(name: "title")
-  String? title;
+  final String? title;
   @JsonKey(name: "date")
-  String? date;
+  final String? date;
   @JsonKey(name: "hdurl")
-  String? hdUrl;
+  final String? hdUrl;
 
-  ApodResponseDto({this.title, this.date, this.hdUrl});
+  const ApodResponseDto({this.title, this.date, this.hdUrl});
 
   factory ApodResponseDto.fromJson(Map<String, dynamic> json) => _$ApodResponseDtoFromJson(json);
 

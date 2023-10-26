@@ -17,7 +17,7 @@ class ImageInteractor {
       final remoteData = await _remoteDataSource.getLastApod();
       return remoteData;
     } catch (e) {
-      throw Exception("Data not found / Connection issue: $e");
+      throw Exception("Failed to get the picture of the day: $e");
     }
   }
 
@@ -29,7 +29,7 @@ class ImageInteractor {
       final remoteData = await _remoteDataSource.getApodByDate(date);
       return remoteData;
     } catch (e) {
-      throw Exception("Data not found / Connection issue: $e");
+      throw Exception("Failed to get image: $e");
     }
   }
 
@@ -46,37 +46,36 @@ class ImageInteractor {
 
   ///[saveImagesToDatabase] method checks how much data is in the database and updates the database
   Future<void> saveImagesToDatabase() async {
-    DateTime startDate = DateTime(1995, 6, 16);
+    final DateTime startDate = DateTime(2022, 6, 16);
     final DateTime endDate = DateTime.now();
+    final Iterable<ImageDataModel> images;
+    double startDifference = (endDate.difference(startDate).inHours) / 24;
     double daysDifference = (endDate.difference(startDate).inHours) / 24;
-    try {
-      int? databaseRows = await _localDataSource.countRows();
-      if (databaseRows != null) {
-        if (databaseRows == 0) {
-          final images = await _remoteDataSource.getApodBetweenDates(startDate, endDate);
-          await _localDataSource.saveImages(images);
-        } else {
-          if (daysDifference > databaseRows) {
-            daysDifference = daysDifference - databaseRows;
-            DateTime newStartDate = endDate.subtract(Duration(days: daysDifference.ceil()));
-            final images = await _remoteDataSource.getApodBetweenDates(newStartDate, endDate);
-            await _localDataSource.saveImages(images);
-          }
+
+    int? databaseRows = await _localDataSource.countRows();
+    if (databaseRows != null) {
+      if (databaseRows == 0) {
+        images = await _remoteDataSource.getApodBetweenDates(startDate, endDate);
+        await _localDataSource.saveImages(images);
+        if (databaseRows != startDifference.ceil()) {
+          throw Exception("Failed to download all images");
         }
+      } else if (daysDifference > databaseRows) {
+          daysDifference = daysDifference - databaseRows;
+          final DateTime newStartDate = endDate.subtract(Duration(days: daysDifference.ceil()));
+          images = await _remoteDataSource.getApodBetweenDates(newStartDate, endDate);
+          await _localDataSource.saveImages(images);
+          if (databaseRows != startDifference.ceil()) {
+            throw Exception("Failed to download all images");
+          }
       }
-    } catch (e) {
-      throw Exception("Failed to save images: $e ");
     }
   }
 
   Future<Iterable<ImageDataModel>> searchByTitle(String searchText) async {
     final Iterable<ImageDataModel> matches;
-    try {
-      final images = await _localDataSource.getApodByTitle(searchText);
-      matches = images.where((element) => element.title.toLowerCase().contains(searchText.toLowerCase()));
-    } catch (e) {
-      throw Exception("Data not found: $e");
-    }
+    final images = await _localDataSource.getApodByTitle(searchText);
+    matches = images.where((element) => element.title.toLowerCase().contains(searchText.toLowerCase()));
 
     return matches;
   }
