@@ -46,7 +46,7 @@ class ImageInteractor {
 
   ///[saveImagesToDatabase] method checks how much data is in the database and updates the database
   Future<void> saveImagesToDatabase() async {
-    final DateTime startDate = DateTime(2022, 6, 16);
+    final DateTime startDate = DateTime(1995, 6, 16);
     final DateTime endDate = DateTime.now();
     final Iterable<ImageDataModel> images;
     double startDifference = (endDate.difference(startDate).inHours) / 24;
